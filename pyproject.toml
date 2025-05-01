@@ -1,0 +1,7 @@
+[project]
+name = "bot-svc"
+version = "0.1.0"
+description = "A Telegram bot that forwards messages via RabbitMQ for data extraction, displays job vacancy statuses, and can initiate contact with users mentioned in messages."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
