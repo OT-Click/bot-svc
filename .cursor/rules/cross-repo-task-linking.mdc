@@ -1,0 +1,98 @@
+---
+description: Rule for linking commits/PRs in service repositories to tasks in the central project_root repository.
+globs: [] # Applies generally when requested
+alwaysApply: false
+---
+# Cross-Repository Task Linking Rule
+
+This rule defines the process for an LLM working within a specific service repository (e.g., `bot-svc`, `ingest-svc`) to correctly reference a task (GitHub Issue) located in the central `OT-Click/project_root` repository when creating Git commits or Pull Requests.
+
+## Context
+
+*   **Central Task Repository:** `OT-Click/project_root` (All task issues are managed here).
+*   **Service Repositories:** Other repositories within the `OT-Click` organization (e.g., `bot-svc`, `matcher-svc`) where development work occurs.
+*   **Goal:** Ensure commits and PRs in service repositories clearly link back to the corresponding task issue in `project_root` using its URL or number.
+
+## User Input Required
+
+When requesting a commit or PR that relates to a central task, the user MUST provide:
+
+1.  **The Issue Number** of the task in the `OT-Click/project_root` repository (e.g., `#89`).
+
+## Workflow for LLM
+
+1.  **Identify Input:** Extract the central task's **Issue Number** (e.g., `#89`) from the user's request.
+2.  **Fetch Task Details:** Use the `github.get_issue` tool to retrieve information about the specified issue from the central repository:
+    *   `owner`: "OT-Click"
+    *   `repo`: "project_root"
+    *   `issue_number`: The number extracted in Step 1 (without the '#').
+    *   **Extract:** Get the `html_url` (e.g., `https://github.com/OT-Click/project_root/issues/89`) and the `title` of the issue.
+3.  **Determine Task ID (from Title):** Attempt to extract the `[TaskID]` (e.g., `[TASK-SP1-001]`) from the beginning of the fetched issue `title`. If extraction fails or the title format is unexpected, proceed without it for the commit subject line.
+4.  **Format Commit Message (if requested):**
+    *   Follow the structure defined in the [@commit-message-template.mdc](mdc:.cursor/rules/commit-message-template.mdc) rule.
+    *   **Subject Line:** Use the format `<type>: [Optional TaskID] <description>`. Include the extracted `[TaskID]` if available, otherwise use `<type>: <description>`. The `<description>` should concisely state the change made in the *current* service repository.
+    *   **Body (Optional):** Add details about the changes made.
+    *   **Footer (Mandatory):** Add a reference to the central task using *either* the issue number or the full URL:
+        *   `Refs: #IssueNumber` (e.g., `Refs: #89`)
+        *   **OR** `Related-Task: <html_url>` (e.g., `Related-Task: https://github.com/OT-Click/project_root/issues/89`)
+5.  **Format Pull Request Description (if requested):**
+    *   Refer to the template in `@pull-request-template.mdc`.
+    *   **PR Title:** Suggest a title like `<type>: [Optional TaskID] <Brief Description> (Refs #IssueNumber)`. Include `[TaskID]` if extracted.
+    *   **Related Task Field:** Fill this field using the `[TaskID]` (if extracted), the `IssueNumber`, and the `html_url`:
+        ```markdown
+        **Related Task:** [TaskID] - Issue #[IssueNumber] ([html_url]) 
+        <!-- Example: **Related Task:** [TASK-SP1-001] - Issue #89 (https://github.com/OT-Click/project_root/issues/89) -->
+        ```
+    *   Fill in the rest of the PR template sections (`Description`, `Changes Made`, `Testing`, etc.) based on the work done in the *current* service repository.
+6.  **Execute Action:**
+    *   **Commit:**
+        1.  Stage all changes using `git add .` in the current service repository.
+        2.  Commit the staged changes using the formatted message from Step 4 (following [@commit-message-template.mdc](mdc:.cursor/rules/commit-message-template.mdc)) with the `git commit` command.
+        3.  Push the commit using `git push`.
+    *   **Pull Request:** Use the formatted title and description from Step 5 with the `github.create_pull_request` tool for the current service repository (ensure `owner` and `repo` parameters match the service repository, not `project_root`).
+
+## Examples
+
+**Commit Message Example (in `bot-svc` repo):**
+
+```
+feat: [TASK-SP1-001] Add initial aiogram bot setup
+
+Basic bot and dispatcher initialization added.
+
+Refs: #89 
+```
+*or*
+```
+feat: Add initial aiogram bot setup
+
+Basic bot and dispatcher initialization added.
+
+Related-Task: https://github.com/OT-Click/project_root/issues/89
+```
+
+
+**Pull Request Description Snippet Example (in `bot-svc` repo):**
+
+```markdown
+<!-- PR Title: feat: [TASK-SP1-001] Add initial aiogram bot setup (Refs #89) -->
+
+**Related Task:** [TASK-SP1-001] - Issue #89 (https://github.com/OT-Click/project_root/issues/89)
+
+**Description:**
+This PR introduces the basic setup for the aiogram bot in the `bot-svc`.
+
+**Changes Made:**
+* Added `src/main.py` with Bot and Dispatcher instances.
+* Updated `pyproject.toml` with necessary dependencies.
+
+... (rest of PR template) ...
+```
+
+## Important Notes
+
+*   The central repository owner (`OT-Click`) and name (`project_root`) are fixed in this rule.
+*   The LLM MUST obtain the specific **Issue Number** from the user for the task in `project_root`.
+*   Always use the `github.get_issue` tool to verify the issue exists and retrieve its correct URL and title before formatting.
+*   Apply the formatting rules defined in [@commit-message-template.mdc](mdc:.cursor/rules/commit-message-template.mdc) and [@pull-request-template.mdc](mdc:.cursor/rules/pull-request-template.mdc).
+*   Ensure the final `git commit` or `github.create_pull_request` action is performed against the correct **service repository** where the code changes were made.
