@@ -1,0 +1,73 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Pull Request Template
+
+This template provides a standard structure for Pull Request descriptions, ensuring clarity and linking changes to the relevant task.
+
+---
+
+## Pull Request Description Template (for GitHub)
+
+```markdown
+<!-- 
+PR Title Suggestion: <Type>: [TaskID] <Brief Description> 
+Example: feat: [TASK-SP1-001] Implement user registration API
+-->
+
+**Related Task:** [TaskID] - Issue #[IssueNumber] <!-- Or Link: [Link to Issue] -->
+<!-- Example: **Related Task:** [TASK-SP1-001] - Issue #89 -->
+<!-- Example: **Related Task:** [TASK-SP1-001](mdc:https:/github.com/OT-Click/project_root/issues/89) -->
+
+
+**Description:**
+
+<!-- Provide a brief (1-3 sentences) overview of the purpose of this PR and the changes introduced. -->
+
+
+**Changes Made:**
+
+<!-- List the specific changes implemented in this PR. -->
+* Change 1
+* Change 2
+* ...
+
+
+**Testing:**
+
+<!-- Describe how these changes were tested (e.g., unit tests added/passed, manual testing steps, CI results). -->
+
+
+**Screenshots/GIFs (Optional):**
+
+<!-- If applicable, add screenshots or GIFs to visually demonstrate the changes, especially for UI updates. -->
+<!-- 
+<img src="..." width="300"> 
+-->
+
+
+**Checklist:**
+
+<!-- Ensure the following before requesting review -->
+* [ ] My code follows the project's coding style guidelines.
+* [ ] I have added relevant tests for my changes.
+* [ ] All new and existing tests pass.
+* [ ] I have updated the documentation accordingly.
+* [ ] My changes do not introduce any new warnings or errors.
+* [ ] The related task (`[TaskID]`) is correctly referenced.
+
+**Notes (Optional):**
+
+<!-- Any additional context, potential issues, or specific points for the reviewer to consider. -->
+
+```
+
+**Instructions:**
+
+*   Fill in the sections above when creating a Pull Request.
+*   Replace placeholders like `[TaskID]`, `[IssueNumber]`, `[Link to Issue]` with actual values.
+*   Use the suggested PR title format.
+*   Ensure the `Related Task` section clearly links the PR to the specific task it implements.
+*   This template content should be copied into the PR description field on GitHub, or saved as `.github/pull_request_template.md` in the target repository for automatic population.

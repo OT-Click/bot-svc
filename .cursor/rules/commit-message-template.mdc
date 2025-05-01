@@ -1,0 +1,56 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Git Commit Message Template
+
+This rule defines the standard template for Git commit messages in this project, ensuring consistency and traceability back to specific tasks.
+
+## Format
+
+Commit messages MUST follow the Conventional Commits specification, with the **Task ID** included at the beginning of the description line.
+
+```
+<type>: [TaskID] <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Explanation:**
+
+*   **`<type>`:** Describes the kind of change (e.g., `feat`, `fix`, `build`, `chore`, `ci`, `docs`, `perf`, `refactor`, `revert`, `style`, `test`).
+*   **`[TaskID]`:** The unique ID of the task this commit relates to, taken from the corresponding GitHub Issue (e.g., `[TASK-SP1-001]`). This MUST be included.
+*   **`<description>`:** A short summary of the change in the imperative mood (e.g., "Add login endpoint", "Fix user validation bug"). Starts with a lowercase letter unless it's a proper noun. No period at the end.
+*   **`[optional body]`:** A more detailed explanation of the changes, separated from the description by a blank line. Explain the "what" and "why" vs. the "how".
+*   **`[optional footer(s)]`:** Used for referencing issues (alternative to including in description), breaking changes, etc. Example: `Refs: #89`, `BREAKING CHANGE: ...`
+
+**Examples:**
+
+*   **Simple fix:**
+    ```
+    fix: [TASK-SP1-005] Correct calculation for user discounts
+    ```
+*   **New feature with body:**
+    ```
+    feat: [TASK-SP1-002] Implement user registration API
+
+    Adds the POST /users endpoint to allow new user registration.
+    Includes input validation and password hashing.
+    ```
+*   **Refactor with footer reference:**
+    ```
+    refactor: [TASK-SP1-008] Simplify database query logic
+
+    Improves performance by optimizing the main user query.
+
+    Refs: #89
+    ```
+
+**Key Requirements:**
+
+*   Always include the `[TaskID]` at the start of the description line.
+*   Use the appropriate `<type>`.
+*   Keep the description concise and clear.
