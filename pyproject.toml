@@ -4,4 +4,38 @@ version = "0.1.0"
 description = "A Telegram bot that forwards messages via RabbitMQ for data extraction, displays job vacancy statuses, and can initiate contact with users mentioned in messages."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "aiogram>=3.20.0.post0",
+    "motor>=3.7.0",
+    "pydantic>=2.11.4",
+    "pydantic-settings>=2.9.1",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+select = ["E", "F", "I"]
+ignore = []
+fixable = ["ALL"]
+unfixable = []
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+]
+
+[tool.ruff.isort]
+known-first-party = ["src"]
+
+[tool.pyright]
+includePackageJsons = true
+typeCheckingMode = "basic"
+reportMissingImports = true
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-asyncio>=0.26.0",
+]
