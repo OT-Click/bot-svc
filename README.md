@@ -56,7 +56,12 @@ The bot should start polling for messages.
 
 ## Development
 
-*   **Project Structure:** The main application code resides in the `src/` directory.
+*   **Project Structure:** 
+    *   The main application code resides in the `src/` directory.
+    *   `src/main.py`: Main entry point for the application.
+    *   `src/config/`: Configuration loading (settings, logging).
+    *   `src/handlers/`: Aiogram handlers for commands and messages.
+    *   `src/middlewares/`, `src/services/`, `src/utils/`, `src/database/`: Placeholders for future modules (middleware, business logic, utilities, database interactions).
 *   **Package Management:** Dependencies are managed using `uv` and defined in `pyproject.toml`.
 *   **Linting/Formatting:** `ruff` is used for linting and formatting. It's configured in `pyproject.toml` and integrated with VSCode to format on save.
 *   **Type Checking:** `pyright` is used for static type checking, configured in `pyproject.toml`.
